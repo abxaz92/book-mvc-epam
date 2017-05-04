@@ -1,6 +1,5 @@
 package com.epam.david.mvc.controller;
 
-import com.epam.david.mvc.common.OutputType;
 import com.epam.david.mvc.entities.Book;
 import com.epam.david.mvc.service.BookService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Created by David_Chaava on 5/4/2017.
@@ -37,9 +35,9 @@ public class BookController {
 
     @RequestMapping(value = "/author", method = RequestMethod.GET)
     public ModelAndView getByAuthor(@RequestParam("author") String author,
-                                    @RequestParam(value = "type", defaultValue = "HTML") OutputType outputType) {
+                                    @RequestHeader("Accept") String acceptType) {
         List<Book> books = bookService.getByAuthor(author);
-        if (OutputType.PDF == outputType) {
+        if ("application/pdf".equals(acceptType)) {
             return getPdfModelAndView(books);
         }
         return getHtmlModelAndView(books);
