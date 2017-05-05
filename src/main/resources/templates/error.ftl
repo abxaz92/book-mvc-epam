@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-Cause : ${cause}
+<#if cause??>
+    Cause : ${cause}
+</#if>
 <br>
 <br>
 </body>
