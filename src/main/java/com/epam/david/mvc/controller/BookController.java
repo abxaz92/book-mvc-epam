@@ -61,7 +61,7 @@ public class BookController {
     }
 
     private ModelAndView getPdfModelAndView(List<Book> books) {
-        return new ModelAndView("BookPdfView", "books", books);
+        return new ModelAndView("BookPd fView", "books", books);
     }
 
     private ModelAndView getHtmlModelAndView(List<Book> books) {

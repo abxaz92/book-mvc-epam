@@ -23,8 +23,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .mvcMatchers("/**")
-                .authenticated()
-                .and().formLogin();
+                .antMatchers("/book/**").authenticated()
+                .and()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error")
+                .usernameParameter("username").passwordParameter("password")
+                .and()
+                .logout().logoutSuccessUrl("/login?logout")
+                .and().csrf();
     }
 }
