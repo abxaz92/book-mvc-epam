@@ -4,13 +4,4 @@
 
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
-    <servlet>
-        <servlet-name>jsp</servlet-name>
-        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>jsp</servlet-name>
-        <url-pattern>/WEB-INF/views/*</url-pattern>
-    </servlet-mapping>
 </web-app>
