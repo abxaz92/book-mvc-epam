@@ -26,10 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/book/**").authenticated()
                 .and()
                 .formLogin()
-//                .loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error")
-                .usernameParameter("username").passwordParameter("password")
+                .loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error")
                 .and()
                 .logout().logoutSuccessUrl("/login?logout")
-                .and().csrf();
+                .and().csrf().disable();
     }
 }
