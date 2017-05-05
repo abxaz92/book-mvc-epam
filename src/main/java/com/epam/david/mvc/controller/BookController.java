@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,14 @@ public class BookController {
     private BookService bookService;
 
     @RequestMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public String test(@PathVariable(value = "id") String id, Model model) {
         Book book = bookService.getById(id);
         model.addAttribute("book", book);
         return "book";
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/author", method = RequestMethod.GET)
     public ModelAndView getByAuthor(@RequestParam("author") String author,
                                     @RequestHeader("Accept") String acceptType) {
