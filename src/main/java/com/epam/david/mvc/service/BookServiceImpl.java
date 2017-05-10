@@ -42,12 +42,9 @@ public class BookServiceImpl implements BookService {
         try {
             String sqlQueryString = "SELECT id, name, author FROM books WHERE ID = ?";
             List<Map<String, Object>> res = jdbcTemplate.queryForList(sqlQueryString, new Object[]{1L});
-            Book book = jdbcTemplate.queryForObject(sqlQueryString, new Object[]{1L}, new RowMapper<Book>() {
-                @Override
-                public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-                    return new Book(resultSet.getLong("ID"), resultSet.getString("name"), "");
-                }
-            });
+            Book book = jdbcTemplate
+                    .queryForObject(sqlQueryString, new Object[]{1L}, (resultSet, i) ->
+                            new Book(resultSet.getLong("ID"), resultSet.getString("name"), ""));
 
             logger.warn("{}", res);
             logger.warn("{}", book != null ? book.getName() : "NULL");
