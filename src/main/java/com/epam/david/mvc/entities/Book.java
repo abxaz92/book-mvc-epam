@@ -4,25 +4,25 @@ package com.epam.david.mvc.entities;
  * Created by David_Chaava on 5/4/2017.
  */
 public class Book {
-    private String id;
+    private Long id;
     private String name;
     private String author;
 
     public Book() {
     }
 
-    public Book(String id, String name, String author) {
+    public Book(Long id, String name, String author) {
         this();
         this.id = id;
         this.name = name;
         this.author = author;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
