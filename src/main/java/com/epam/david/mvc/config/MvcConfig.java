@@ -53,6 +53,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     public XmlViewResolver getPdfViewResolver() {
         XmlViewResolver viewResolver = new XmlViewResolver();
+        viewResolver.setLocation(new ClassPathResource("views.xml"));
         return viewResolver;
     }
 
