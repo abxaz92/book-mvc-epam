@@ -29,7 +29,7 @@ public class BookController {
 
     @RequestMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public String test(@PathVariable(value = "id") String id, Model model) {
+    public String test(@PathVariable(value = "id") Long id, Model model) {
         Book book = bookService.getById(id);
         model.addAttribute("book", book);
         return "book";
@@ -46,6 +46,15 @@ public class BookController {
         return getHtmlModelAndView(books);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView getAll(@RequestParam(value = "skip", defaultValue = "0") Long skip,
+                               @RequestParam(value = "limit", defaultValue = "10") Long limit) {
+        List<Book> books = bookService.getAll(skip, limit);
+        return getHtmlModelAndView(books);
+    }
+
+
     @RequestMapping(value = "/batch", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void uploadBatch(@RequestParam("file") MultipartFile file) throws IOException {
@@ -56,7 +65,7 @@ public class BookController {
     }
 
     @RequestMapping("/error")
-    public void testException() {
+    public void exceptionHandler() {
         throw new RuntimeException();
     }
 

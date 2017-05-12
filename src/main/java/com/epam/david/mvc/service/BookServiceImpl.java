@@ -25,43 +25,78 @@ import java.util.stream.Collectors;
  */
 @Service
 public class BookServiceImpl implements BookService {
-    private Map<String, Book> booksMap = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @PostConstruct
     public void init() {
-        booksMap.put("1", new Book(1L, "Война и Мир", "Толстой"));
-        booksMap.put("2", new Book(2L, "Мастер и Маргарита", "Булгаков"));
-        booksMap.put("3", new Book(3L, "После Бала", "Толстой"));
     }
 
     @Override
-    public Book getById(String id) {
+    public Book getById(Long id) {
         try {
             String sqlQueryString = "SELECT id, name, author FROM books WHERE ID = ?";
-            List<Map<String, Object>> res = jdbcTemplate.queryForList(sqlQueryString, new Object[]{1L});
             Book book = jdbcTemplate
-                    .queryForObject(sqlQueryString, new Object[]{1L}, (resultSet, i) ->
-                            new Book(resultSet.getLong("ID"), resultSet.getString("name"), ""));
-
-            logger.warn("{}", res);
-            logger.warn("{}", book != null ? book.getName() : "NULL");
-            return booksMap.get(id);
+                    .queryForObject(sqlQueryString, new Object[]{id}, (resultSet, i) -> {
+                        long bookId = resultSet.getLong("ID");
+                        String name = resultSet.getString("name");
+                        String author = resultSet.getString("author");
+                        return new Book(bookId, name, author);
+                    });
+            return book;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
+    }
+
+    @Override
+    public List<Book> getAll(Long skip, Long limit) {
+        skip = skip == null ? 0 : skip;
+        limit = limit == null ? 10 : limit;
+        try {
+            logger.warn("{}", limit);
+            String sqlQueryString = "SELECT id, name, author FROM books OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
+            List<Map<String, Object>> booksMap = jdbcTemplate.queryForList(sqlQueryString, new Object[]{skip, limit});
+            List<Book> books = mapToList(booksMap);
+            return books;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public List<Book> getByAuthor(String author) {
-        return booksMap
-                .values()
-                .stream()
-                .filter(book -> Objects.equals(book.getAuthor(), author))
-                .collect(Collectors.toList());
+        try {
+            String sqlQueryString = "SELECT id, name, author FROM books WHERE AUTHOR = ?";
+            List<Map<String, Object>> booksMap = jdbcTemplate.queryForList(sqlQueryString, new Object[]{author});
+            List<Book> books = mapToList(booksMap);
+            return books;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    private static List<Book> mapToList(List<Map<String, Object>> booksMap) {
+        return booksMap.stream().map(element -> {
+            Book book = new Book();
+            book.setId(Long.valueOf(String.valueOf(element.get("ID"))));
+            book.setName(String.valueOf(element.get("name")));
+            book.setAuthor(String.valueOf(element.get("author")));
+            return book;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public void remove(Long id) {
+
+    }
+
+    @Override
+    public Book update(Long id, Book book) {
+        return null;
     }
 }
