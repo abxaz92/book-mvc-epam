@@ -32,6 +32,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getById(Long id) {
+        if (id == null)
+            return null;
+        if (id == 0)
+            return null;
         try {
             String sqlQueryString = "SELECT id, name, author FROM books WHERE ID = ?";
             Book book = jdbcTemplate

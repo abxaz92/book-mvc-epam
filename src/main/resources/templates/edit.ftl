@@ -2,6 +2,10 @@
 <@spring.bind path= "book" />
 <form action="/book/add" method="post">
     <table>
+        <tr style="display: none;">
+            <td>Id</td>
+            <td><@spring.formInput "book.id" fieldType=number/></td>
+        </tr>
         <tr>
             <td>Название</td>
             <td><@spring.formInput "book.name" /></td>
