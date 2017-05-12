@@ -1,11 +1,7 @@
 <#import "/spring.ftl" as spring/>
 <@spring.bind path= "book" />
-<form action="/book/add" method="post">
+<form action="/book/edit/${id}" method="post">
     <table>
-        <tr style="display: none;">
-            <td>Id</td>
-            <td><@spring.formInput "book.id" fieldType=number/></td>
-        </tr>
         <tr>
             <td>Название</td>
             <td><@spring.formInput "book.name" /></td>

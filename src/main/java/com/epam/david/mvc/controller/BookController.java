@@ -56,18 +56,30 @@ public class BookController {
     }
 
 
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String getAddForm(Model model) {
-        model.addAttribute("book", new Book());
-        return "add";
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String getAddForm(@PathVariable("id") Long id, Model model) {
+        Book book = bookService.getById(id);
+        book = book == null ? new Book() : book;
+        model.addAttribute("book", book);
+        model.addAttribute("id", id);
+        return "edit";
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ModelAndView postAddForm(@ModelAttribute("book") Book book) {
-        Book insertedBook = bookService.insert(book);
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public ModelAndView postAddForm(@PathVariable("id") Long id, @ModelAttribute("book") Book book) {
+        Book insertedBook;
+        if (!isIdAssigned(id)) {
+            insertedBook = bookService.insert(book);
+        } else
+            insertedBook = bookService.update(id, book);
+
         ModelAndView maw = new ModelAndView("book");
         maw.addObject("book", insertedBook);
         return maw;
+    }
+
+    private boolean isIdAssigned(@PathVariable("id") Long id) {
+        return id != 0;
     }
 
     @RequestMapping(value = "/batch", method = RequestMethod.POST)
