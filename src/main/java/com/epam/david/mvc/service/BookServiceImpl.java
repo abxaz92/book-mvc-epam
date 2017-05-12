@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.sql.PreparedStatement;
@@ -25,6 +27,8 @@ public class BookServiceImpl implements BookService {
     private static final Logger logger = LoggerFactory.getLogger(BookService.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private BookService bookService;
 
     @PostConstruct
     public void init() {
@@ -91,33 +95,24 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Book insert(Book book) {
-        try {
-            SimpleJdbcInsert insertOp = new SimpleJdbcInsert(jdbcTemplate).withTableName("books")
-                    .usingGeneratedKeyColumns("ID");
-
-            Map<String, Object> paramsMap = new HashMap<>(2);
-            paramsMap.put("name", book.getName());
-            paramsMap.put("author", book.getAuthor());
-            Number generatedId = insertOp.executeAndReturnKey(paramsMap);
-            logger.warn("{}", generatedId);
-            return getById(generatedId == null ? null : generatedId.longValue());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        SimpleJdbcInsert insertOp = new SimpleJdbcInsert(jdbcTemplate).withTableName("books")
+                .usingGeneratedKeyColumns("ID");
+        Map<String, Object> paramsMap = new HashMap<>(2);
+        paramsMap.put("name", book.getName());
+        paramsMap.put("author", book.getAuthor());
+        Number generatedId = insertOp.executeAndReturnKey(paramsMap);
+        return getById(generatedId == null ? null : generatedId.longValue());
     }
 
     @Override
+    @Transactional
     public Book update(Long id, Book book) {
-        try {
-            String sqlQueryString = "UPDATE books SET name= ?, author = ? WHERE ID = ?";
-            jdbcTemplate.update(sqlQueryString, new Object[]{book.getName(), book.getAuthor(), id});
-            return getById(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        String sqlQueryString = "UPDATE books SET name= ?, author = ? WHERE ID = ?";
+        jdbcTemplate.update(sqlQueryString, new Object[]{book.getName(), book.getAuthor(), id});
+        return getById(id);
+
     }
 
     @Override
