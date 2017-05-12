@@ -4,20 +4,17 @@ import com.epam.david.mvc.entities.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +53,6 @@ public class BookServiceImpl implements BookService {
         skip = skip == null ? 0 : skip;
         limit = limit == null ? 10 : limit;
         try {
-            logger.warn("{}", limit);
             String sqlQueryString = "SELECT id, name, author FROM books OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
             List<Map<String, Object>> booksMap = jdbcTemplate.queryForList(sqlQueryString, new Object[]{skip, limit});
             List<Book> books = mapToList(booksMap);
@@ -91,12 +87,37 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void remove(Long id) {
+    public Book insert(Book book) {
+        try {
+            SimpleJdbcInsert insertOp = new SimpleJdbcInsert(jdbcTemplate).withTableName("books")
+                    .usingGeneratedKeyColumns("ID");
 
+            Map<String, Object> paramsMap = new HashMap<>(2);
+            paramsMap.put("name", book.getName());
+            paramsMap.put("author", book.getAuthor());
+            Number generatedId = insertOp.executeAndReturnKey(paramsMap);
+            logger.warn("{}", generatedId);
+            return getById(generatedId == null ? null : generatedId.longValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public Book update(Long id, Book book) {
-        return null;
+        try {
+            String sqlQueryString = "UPDATE books SET name= ?, author = ? WHERE ID = ?";
+            jdbcTemplate.update(sqlQueryString, new Object[]{book.getName(), book.getAuthor(), id});
+            return getById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void remove(Long id) {
+
     }
 }

@@ -4,6 +4,8 @@ import com.epam.david.mvc.entities.Book;
 import com.epam.david.mvc.service.BookService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,8 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.logging.Logger;
+import java.util.List;
 
 /**
  * Created by David_Chaava on 5/4/2017.
@@ -23,13 +24,13 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("/book")
 public class BookController {
-    private static final Logger logger = Logger.getLogger("BookController");
+    private static final Logger logger = LoggerFactory.getLogger("BookController");
     @Autowired
     private BookService bookService;
 
     @RequestMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public String test(@PathVariable(value = "id") Long id, Model model) {
+    public String getById(@PathVariable(value = "id") Long id, Model model) {
         Book book = bookService.getById(id);
         model.addAttribute("book", book);
         return "book";
@@ -55,6 +56,20 @@ public class BookController {
     }
 
 
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String getAddForm(Model model) {
+        model.addAttribute("book", new Book());
+        return "add";
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ModelAndView postAddForm(@ModelAttribute("book") Book book) {
+        Book insertedBook = bookService.insert(book);
+        ModelAndView maw = new ModelAndView("book");
+        maw.addObject("book", insertedBook);
+        return maw;
+    }
+
     @RequestMapping(value = "/batch", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void uploadBatch(@RequestParam("file") MultipartFile file) throws IOException {
@@ -62,11 +77,6 @@ public class BookController {
         List<Book> books = mapper.readValue(file.getInputStream(), new TypeReference<List<Book>>() {
         });
         books.stream().forEach(book -> logger.info(book.getName()));
-    }
-
-    @RequestMapping("/error")
-    public void exceptionHandler() {
-        throw new RuntimeException();
     }
 
     private ModelAndView getPdfModelAndView(List<Book> books) {

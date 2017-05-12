@@ -6,6 +6,10 @@
 <#if book??>
 <table>
   <tr>
+    <td>Id</td>
+    <td>${book.id}</td>
+  </tr>
+  <tr>
     <td>Name</td>
     <td>${book.name}</td>
   </tr>

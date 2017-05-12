@@ -14,6 +14,8 @@ public interface BookService {
 
     List<Book> getByAuthor(String author);
 
+    Book insert(Book book);
+
     void remove(Long id);
 
     Book update(Long id, Book book);
