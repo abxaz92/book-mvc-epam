@@ -1,6 +1,7 @@
 package com.epam.david.mvc.controller;
 
 import com.epam.david.mvc.entities.Book;
+import com.epam.david.mvc.repositories.BookRepository;
 import com.epam.david.mvc.service.BookService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,13 +26,18 @@ import java.util.List;
 @RequestMapping("/book")
 public class BookController {
     private static final Logger logger = LoggerFactory.getLogger("BookController");
+
+    @Autowired
+    private BookRepository bookRepository;
+
     @Autowired
     private BookService bookService;
 
     @RequestMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public String getById(@PathVariable(value = "id") Long id, Model model) {
-        Book book = bookService.getById(id);
+//        Book book = bookService.getById(id);
+        Book book = bookRepository.findOne(id);
         model.addAttribute("book", book);
         return "book";
     }
@@ -55,6 +61,13 @@ public class BookController {
         return getHtmlModelAndView(books);
     }
 
+    @RequestMapping(value = "/repo", method = RequestMethod.GET)
+    public ModelAndView getAllFromRepo(@RequestParam(value = "skip", defaultValue = "0") Long skip,
+                                       @RequestParam(value = "limit", defaultValue = "10") Long limit) {
+        ModelAndView modelAndView = new ModelAndView("books");
+        modelAndView.addObject("books", bookRepository.findAll());
+        return modelAndView;
+    }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String getAddForm(@PathVariable("id") Long id, Model model) {

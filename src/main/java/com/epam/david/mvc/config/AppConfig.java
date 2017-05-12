@@ -1,6 +1,7 @@
 package com.epam.david.mvc.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,6 +35,7 @@ public class AppConfig {
 
 
     @Bean
+    @Qualifier("transactionManager")
     public PlatformTransactionManager getTransactionManager() {
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
         dataSourceTransactionManager.setDataSource(dataSource);
