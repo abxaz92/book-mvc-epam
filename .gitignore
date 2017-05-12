@@ -26,3 +26,4 @@ portal-core.iml
 # Locally stored "Eclipse launch configuration s"
 *.launch
 /nb-configuration.xml
+/mvc.iml
