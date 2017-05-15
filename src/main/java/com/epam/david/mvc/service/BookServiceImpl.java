@@ -61,7 +61,7 @@ public class BookServiceImpl implements BookService {
         skip = skip == null ? 0 : skip;
         limit = limit == null ? 10 : limit;
         try {
-            String sqlQueryString = "SELECT id, name, author FROM books OFFSET ? ROWS FETCH FIRST ? ROWS ONLY";
+            String sqlQueryString = "SELECT id, name, author FROM books OFFSET ? LIMIT ?    ";
             List<Map<String, Object>> booksMap = jdbcTemplate.queryForList(sqlQueryString, new Object[]{skip, limit});
             List<Book> books = mapToList(booksMap);
             return books;
