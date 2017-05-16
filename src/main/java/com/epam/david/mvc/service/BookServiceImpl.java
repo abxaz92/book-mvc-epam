@@ -1,6 +1,11 @@
 package com.epam.david.mvc.service;
 
+import com.epam.david.mvc.entities.Author;
 import com.epam.david.mvc.entities.Book;
+import com.epam.david.mvc.entities.Genre;
+import com.epam.david.mvc.repositories.AuthorRepository;
+import com.epam.david.mvc.repositories.BookRepository;
+import com.epam.david.mvc.repositories.GenreRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,31 +34,49 @@ public class BookServiceImpl implements BookService {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private BookRepository bookRepository;
+    @Autowired
+    private AuthorRepository authorRepository;
+    @Autowired
+    private GenreRepository genreRepository;
 
     @PostConstruct
     public void init() {
+
+    }
+
+    @Transactional
+    public void initData() {
+        Book book = new Book();
+        book.setName("Война и Мир");
+        Author author = new Author();
+        author.setName("Толстой");
+        authorRepository.save(author);
+
+        Genre genre = new Genre();
+        genre.setName("Роман");
+        genreRepository.save(genre);
+
+        book.setAuthor(author);
+        book.setAmount(10);
+        book.setGenre(genre);
+        bookRepository.save(book);
     }
 
     @Override
     public Book getById(Long id) {
-        if (id == null)
-            return null;
-        if (id == 0)
-            return null;
+//        if (id == null)
+//            return null;
+//        if (id == 0)
+//            return null;
         try {
-            String sqlQueryString = "SELECT id, name, author FROM books WHERE ID = ?";
-            Book book = jdbcTemplate
-                    .queryForObject(sqlQueryString, new Object[]{id}, (resultSet, i) -> {
-                        long bookId = resultSet.getLong("ID");
-                        String name = resultSet.getString("name");
-                        String author = resultSet.getString("author");
-                        return new Book(bookId, name, author);
-                    });
-            return book;
+            bookService.initData();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
     @Override
@@ -89,7 +112,7 @@ public class BookServiceImpl implements BookService {
             Book book = new Book();
             book.setId(Long.valueOf(String.valueOf(element.get("ID"))));
             book.setName(String.valueOf(element.get("name")));
-            book.setAuthor(String.valueOf(element.get("author")));
+//            book.setAuthor(String.valueOf(element.get("author")));
             return book;
         }).collect(Collectors.toList());
     }

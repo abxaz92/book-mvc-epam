@@ -34,8 +34,8 @@ public class BookPdfView extends AbstractPdfView {
         table.addCell("Author");
         for (Book entry : books) {
             table.addCell(entry.getName());
-            table.addCell(entry.getAuthor());
-            logger.info(entry.getAuthor());
+//            table.addCell(entry.getAuthor());
+//            logger.info(entry.getAuthor());
         }
         document.add(table);
     }

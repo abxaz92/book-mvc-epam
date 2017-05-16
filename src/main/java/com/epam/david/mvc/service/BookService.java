@@ -19,4 +19,6 @@ public interface BookService {
     void remove(Long id);
 
     Book update(Long id, Book book);
+
+    void initData();
 }

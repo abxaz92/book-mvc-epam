@@ -1,5 +1,8 @@
 package com.epam.david.mvc.entities;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 
 /**
@@ -13,16 +16,27 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String author;
+
+    @ManyToOne
+    @JoinColumn(name = "AUTHOR_ID")
+    private Author author;
+
+    @ManyToOne
+    @JoinColumn(name = "GENRE_ID")
+    private Genre genre;
+    private int amount;
+    @Version
+    private long version;
 
     public Book() {
+
     }
 
     public Book(Long id, String name, String author) {
         this();
         this.id = id;
         this.name = name;
-        this.author = author;
+//        this.author = author;
     }
 
     @Override
@@ -65,11 +79,35 @@ public class Book {
         this.name = name;
     }
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 }
