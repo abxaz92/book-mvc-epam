@@ -7,5 +7,5 @@
    http://www.springframework.org/schema/context
    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <bean id="BookPdfView" class="com.epam.david.mvc.common.BookPdfView"></bean>
+    <bean id="BookPdfView" class="com.epam.david.common.BookPdfView"></bean>
 </beans>
