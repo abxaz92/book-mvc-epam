@@ -1,4 +1,4 @@
-package com.epam.david;
+package com.epam.david.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.AdviceMode;

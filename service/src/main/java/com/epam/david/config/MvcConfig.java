@@ -1,4 +1,4 @@
-package com.epam.david;
+package com.epam.david.config;
 
 import com.epam.david.common.BookPdfView;
 import freemarker.template.TemplateException;

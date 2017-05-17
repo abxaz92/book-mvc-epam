@@ -8,10 +8,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>model</module>
         <module>repo</module>
         <module>service</module>
-        <module>config</module>
     </modules>
 
     <name>mvc Maven Webapp</name>
@@ -95,23 +93,35 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.3</version>
                 <configuration>
+                    <encoding>UTF-8</encoding>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>com.epam.david.mvc.App</mainClass>
+                    <mainClass>com.epam.david.App</mainClass>
                 </configuration>
             </plugin>
 

@@ -1,4 +1,4 @@
-package com.epam.david;
+package com.epam.david.config;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

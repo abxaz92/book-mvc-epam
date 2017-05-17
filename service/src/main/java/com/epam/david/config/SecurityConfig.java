@@ -1,4 +1,4 @@
-package com.epam.david;
+package com.epam.david.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                    .antMatchers("/book/**").authenticated()
+                    .antMatchers("/api/**").authenticated()
                     .and()
                     .httpBasic();
         }
