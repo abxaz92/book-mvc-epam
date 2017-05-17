@@ -1,6 +1,7 @@
 package com.epam.david.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by David_Chaava on 5/4/2017.
@@ -8,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "books")
-public class Book {
+public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

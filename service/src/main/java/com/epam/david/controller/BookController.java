@@ -1,5 +1,6 @@
 package com.epam.david.controller;
 
+import com.epam.david.jms.MessageSender;
 import com.epam.david.model.Book;
 import com.epam.david.repositories.BookRepository;
 import com.epam.david.service.BookService;
@@ -34,6 +35,8 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+    @Autowired
+    private MessageSender messageSender;
 
     @RequestMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -44,12 +47,19 @@ public class BookController {
         return "book";
     }
 
+    @RequestMapping(value = "/jms/test", method = RequestMethod.GET)
+    @ResponseBody
+    public String jmsTest() {
+        messageSender.sendMessage(new Book(1L, "2", "3"));
+        return "AAAAAAAAAAAAAAAAAAA";
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/author", method = RequestMethod.GET)
     public ModelAndView getByAuthor(@RequestParam("author") String author,
                                     @RequestHeader("Accept") String acceptType) {
         List<Book> books = bookService.getByAuthor(author);
-        if ("application/pdf".equals(acceptType)) {
+        if ("application/pdf" .equals(acceptType)) {
             return getPdfModelAndView(books);
         }
         return getHtmlModelAndView(books);

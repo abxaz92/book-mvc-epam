@@ -10,11 +10,11 @@ import org.apache.camel.impl.DefaultCamelContext;
 public class App {
     public static void main(String[] args) {
         try {
-            CamelContext camelContext = new DefaultCamelContext();
-            camelContext.addRoutes(new FileIntegrationRoute());
-            camelContext.start();
-            Thread.sleep(30000);
-            camelContext.stop();
+//            CamelContext camelContext = new DefaultCamelContext();
+//            camelContext.addRoutes(new FileIntegrationRoute());
+//            camelContext.start();
+//            Thread.sleep(30000);
+//            camelContext.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }

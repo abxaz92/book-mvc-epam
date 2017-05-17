@@ -11,6 +11,7 @@
         <module>repo</module>
         <module>service</module>
         <module>camel</module>
+        <module>jms</module>
     </modules>
 
     <name>mvc Maven Webapp</name>
