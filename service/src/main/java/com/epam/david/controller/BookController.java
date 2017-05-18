@@ -50,7 +50,7 @@ public class BookController {
     @RequestMapping(value = "/jms/test", method = RequestMethod.GET)
     @ResponseBody
     public String jmsTest() {
-        messageSender.sendMessage(new Book(1L, "2", "3"));
+//        messageSender.sendMessage(new Book(1L, "2", "3"));
         return "AAAAAAAAAAAAAAAAAAA";
     }
 
@@ -59,7 +59,7 @@ public class BookController {
     public ModelAndView getByAuthor(@RequestParam("author") String author,
                                     @RequestHeader("Accept") String acceptType) {
         List<Book> books = bookService.getByAuthor(author);
-        if ("application/pdf" .equals(acceptType)) {
+        if ("application/pdf".equals(acceptType)) {
             return getPdfModelAndView(books);
         }
         return getHtmlModelAndView(books);
