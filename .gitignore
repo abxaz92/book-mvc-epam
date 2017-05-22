@@ -21,9 +21,13 @@ local.properties
 .idea
 # External tool builders
 .externalToolBuilders/
-portal-core-recipes.iml
 portal-core.iml
 # Locally stored "Eclipse launch configuration s"
 *.launch
 /nb-configuration.xml
-*~.iml
+*.iml
+bin/
+camel/src/main/resources/
+camel/src/test/
+jms/src/main/resources/
+jms/src/test/
