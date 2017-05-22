@@ -5,6 +5,7 @@ import freemarker.template.TemplateException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
@@ -24,7 +25,8 @@ import java.io.IOException;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan({"com.epam.david.mvc"})
+@EnableAspectJAutoProxy
+@ComponentScan({"com.epam.david.mvc", "com.epam.david.aop"})
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean

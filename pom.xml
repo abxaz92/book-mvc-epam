@@ -12,6 +12,7 @@
         <module>service</module>
         <module>camel</module>
         <module>jms</module>
+        <module>aop</module>
     </modules>
 
     <name>mvc Maven Webapp</name>
@@ -20,6 +21,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
         <dependency>

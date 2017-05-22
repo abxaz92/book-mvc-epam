@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable();
     }
 
-    @Configuration
+    /*@Configuration
     @Order(1)
     public class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
@@ -44,9 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests()
-                    .antMatchers("/api/**").authenticated()
-                    .and()
-                    .httpBasic();
-        }
-    }
+                    .antMatchers("/api*//**").authenticated()
+     .and()
+     .httpBasic();
+     }
+     }*/
 }
